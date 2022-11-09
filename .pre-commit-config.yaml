@@ -1,0 +1,82 @@
+repos:
+ - repo: local
+
+   hooks:
+
+   # Code formatting
+
+   - id: autoflake
+     name: autoflake
+     description: Removes unused imports and variables.
+     stages: [commit]
+     language: python
+     entry: autoflake
+     args: [
+       --in-place,
+       --recursive,
+       --remove-unused-variables,
+       --remove-all-unused-imports,
+       --remove-duplicate-keys
+     ]
+     types: [python]
+
+   - id: isort
+     name: isort
+     description: Sorts imports alphabetically and automatically separated into sections.
+     stages: [commit]
+     language: python
+     entry: isort
+     types: [python]
+
+   - id: black
+     name: black
+     description: Python code formatting.
+     stages: [commit]
+     language: python
+     entry: black
+     types: [python]
+
+   # Code analysis
+
+   - id: flake8
+     name: flake8
+     description: Performs static analysis of source code written in Python.
+     stages: [commit]
+     language: python
+     entry: flake8
+     types: [python]
+
+   - id: mypy
+     name: mypy
+     description: Performs static type checking of source code written in Python.
+     stages: [commit]
+     language: python
+     entry: mypy
+     types: [python]
+     pass_filenames: false
+
+   - id: pylint
+     name: pylint
+     description: Performs static analysis of source code written in Python.
+     stages: [commit]
+     language: python
+     entry: pylint
+     types: [python]
+
+    # Local tests
+
+   - id: pytest
+     name: pytest
+     stages: [commit]
+     language: python
+     entry: pytest
+     types: [python]
+     pass_filenames: false
+
+   - id: pytest-cov
+     name: pytest-cov
+     stages: [push]
+     language: python
+     entry: pytest
+     types: [python]
+     pass_filenames: false

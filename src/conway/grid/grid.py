@@ -1,10 +1,14 @@
+"""This module contains the definition of a Grid."""
+
 import numpy as np
 
-from .structures import Beacon, Blinker, Pulsar, Toad
 from ..transform.array import padding
+from .structures import Beacon, Blinker, Pulsar, Toad
 
 
 class Grid:
+    """Grid class."""
+
     def __init__(self, grid_size: int):
         """Grid constructor: initialize a blank grid.
 
@@ -55,9 +59,7 @@ class Grid:
         toad: np.ndarray = Toad().array
 
         if self.grid_size < max(toad.shape):
-            raise ValueError(
-                f"The grid size isn't big enough to fit a toad (shape = {toad.shape})"
-            )
+            raise ValueError(f"The grid size isn't big enough to fit a toad (shape = {toad.shape})")
 
         toad = padding(toad, self.grid_size, self.grid_size)
         self.array = toad

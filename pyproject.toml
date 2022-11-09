@@ -1,0 +1,82 @@
+[tool.poetry]
+name = "conway"
+version = "0.1.0"
+description = ""
+readme = "README.md"
+authors = ["raphaellndr <raph.landure@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "~3.10"
+numpy = "^1.23.4"
+typer = "^0.7.0"
+
+[tool.poetry.dev-dependencies]
+isort = "5.10.1"
+pre-commit = "2.20.0"
+pytest = "7.2.0"
+flake8 = "5.0.4"
+autoflake = "1.7.7"
+black = "22.10.0"
+mypy = "0.990"
+pylint = "2.15.5"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 100
+
+[tool.isort]
+# Compatibility with black (source: https://black.readthedocs.io/en/stable/guides/using_black_with_other_tools.html#isort)
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+line_length = 100
+
+[tool.pylint.basic]
+good-names = [
+    "i", "j", "k", "ex", "Run", "_", # Default names that come from the pylint configuration.
+    "x", "y", "z"
+]
+
+[tool.pylint.format]
+# Compatibility with black (source: https://black.readthedocs.io/en/stable/guides/using_black_with_other_tools.html#pylint)
+max-line-length = 100
+
+[tool.pylint.master]
+ignore = [".git", ".venv", "scripts"]
+ignore-patterns = "test_.*?py"
+
+[tool.pylint.similarities]
+min-similarity-lines=8
+ignore-imports=true
+ignore-signatures=true
+
+[tool.pytest.ini_options]
+addopts = "--doctest-modules --basetemp .pytest"
+
+[tool.coverage.report]
+show_missing = true
+exclude_lines = [
+    # Have to re-enable the standard pragma
+    "pragma: no cover",
+
+    # Don't complain about missing debug-only code:
+    "def __repr__",
+    "if self.debug",
+
+    # Don't complain if tests don't hit defensive assertion code:
+    "raise AssertionError",
+    "raise NotImplementedError",
+
+    # Don't complain if non-runnable code isn't run:
+    "if 0:",
+    "if __name__ == .__main__.:",
+]
+fail_under = 20
+
+[tool.mypy]
+files = ["src/conway"]
