@@ -42,7 +42,7 @@ class GridInitialization(Enum):
 def update_grid(
     array: np.ndarray, living_cells: set[tuple], tmp_living_cells: set[tuple]
 ) -> tuple[np.ndarray, set[tuple]]:
-    """Updated the grid according to the different rules.
+    """Updates the grid according to the different rules.
 
     :param array: grid array.
     :param living_cells: positions of the living cells.
