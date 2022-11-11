@@ -5,8 +5,8 @@ import time
 import numpy as np
 import typer
 
-from .grid.cell import CellStatus, find_living_cells, get_neighbors, get_neighbors_by_status
-from .grid.grid import Grid, GridInitialization
+from .grid.cell import find_living_cells
+from .grid.grid import Grid, GridInitialization, update_grid
 
 
 def conway(
@@ -28,36 +28,9 @@ def conway(
         print(grid_array)
 
         start = time.time()
-        for living_cell in tmp_living_cells:
-            living_cell_neighbors: set[tuple] = get_neighbors(grid_array.shape, *living_cell)
 
-            living_cell_living_neighbors: set[tuple] = get_neighbors_by_status(
-                grid_array, living_cell_neighbors, status=CellStatus.ALIVE
-            )
-            living_cell_dead_neighbors: set[tuple] = get_neighbors_by_status(
-                grid_array, living_cell_neighbors, status=CellStatus.DEAD
-            )
+        grid_array, tmp_living_cells = update_grid(grid_array, living_cells, tmp_living_cells)
 
-            if len(living_cell_living_neighbors) < 2 or len(living_cell_living_neighbors) > 3:
-                living_cells.remove(tuple(living_cell))
-
-            for dead_neighbor in living_cell_dead_neighbors:
-                dead_cell_neighbors: set[tuple] = get_neighbors(grid_array.shape, *dead_neighbor)
-
-                dead_cell_living_neighbors: set[tuple] = get_neighbors_by_status(
-                    grid_array, dead_cell_neighbors, status=CellStatus.ALIVE
-                )
-
-                if len(dead_cell_living_neighbors) == 3:
-                    living_cells.add(tuple(dead_neighbor))
-
-        for cell in living_cells:
-            grid_array[cell] = 1
-
-        for cell in tmp_living_cells - living_cells:
-            grid_array[cell] = 0
-
-        tmp_living_cells = living_cells.copy()
         print(time.time() - start)
 
 

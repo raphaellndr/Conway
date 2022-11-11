@@ -1,9 +1,11 @@
 """This module contains the definition of a Grid."""
+
 from enum import Enum
 
 import numpy as np
 
 from ..transform.array import padding
+from .cell import CellStatus, get_neighbors, get_neighbors_by_status
 from .structures import (
     OscillatingStructures,
     Oscillator,
@@ -35,6 +37,50 @@ class GridInitialization(Enum):
     LWSS = "lwss"
     MWSS = "mwss"
     HWSS = "hwss"
+
+
+def update_grid(
+    array: np.ndarray, living_cells: set[tuple], tmp_living_cells: set[tuple]
+) -> tuple[np.ndarray, set[tuple]]:
+    """Updated the grid according to the different rules.
+
+    :param array: grid array.
+    :param living_cells: positions of the living cells.
+    :param tmp_living_cells: copy of living_cells.
+    :return: updated grid and the positions of the living cells.
+    """
+    for living_cell in tmp_living_cells:
+        living_cell_neighbors: set[tuple] = get_neighbors(array.shape, *living_cell)
+
+        living_cell_living_neighbors: set[tuple] = get_neighbors_by_status(
+            array, living_cell_neighbors, status=CellStatus.ALIVE
+        )
+        living_cell_dead_neighbors: set[tuple] = get_neighbors_by_status(
+            array, living_cell_neighbors, status=CellStatus.DEAD
+        )
+
+        if len(living_cell_living_neighbors) < 2 or len(living_cell_living_neighbors) > 3:
+            living_cells.remove(tuple(living_cell))
+
+        for dead_neighbor in living_cell_dead_neighbors:
+            dead_cell_neighbors: set[tuple] = get_neighbors(array.shape, *dead_neighbor)
+
+            dead_cell_living_neighbors: set[tuple] = get_neighbors_by_status(
+                array, dead_cell_neighbors, status=CellStatus.ALIVE
+            )
+
+            if len(dead_cell_living_neighbors) == 3:
+                living_cells.add(tuple(dead_neighbor))
+
+    for cell in living_cells:
+        array[cell] = 1
+
+    for cell in tmp_living_cells - living_cells:
+        array[cell] = 0
+
+    tmp_living_cells = living_cells.copy()
+
+    return array, tmp_living_cells
 
 
 class Grid:
