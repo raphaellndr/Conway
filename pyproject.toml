@@ -4,6 +4,9 @@ version = "0.1.0"
 description = ""
 readme = "README.md"
 authors = ["raphaellndr <raph.landure@gmail.com>"]
+packages = [
+    {include="conway", from="src"}
+]
 
 [tool.poetry.dependencies]
 python = "~3.10"
@@ -23,6 +26,9 @@ pylint = "2.15.5"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+euler = "conway.__main__:main"
 
 [tool.black]
 line-length = 100

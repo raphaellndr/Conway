@@ -3,7 +3,14 @@
 import numpy as np
 
 from ..transform.array import padding
-from .structures import Beacon, Blinker, Pulsar, Toad
+from .structures import (
+    OscillatingStructures,
+    Oscillator,
+    SpaceShip,
+    SpaceshipStructures,
+    Stabilized,
+    StabilizedStructures,
+)
 
 
 class Grid:
@@ -17,62 +24,55 @@ class Grid:
         self.grid_size: int = grid_size
         self.array: np.ndarray = np.zeros((grid_size, grid_size))
 
-    def random_init(self):
-        """Initializes a random grid.
+    def grid_init(self, structure_name: str) -> None:
+        """Initializes the grid with a stabilized structure."""
 
-        :return:
-        """
+        if structure_name in set(stabilized.value for stabilized in StabilizedStructures):
+            structure = Stabilized(structure_name).array
+        elif structure_name in set(oscillator.value for oscillator in OscillatingStructures):
+            structure = Oscillator(structure_name).array
+        elif structure_name in set(spaceship.value for spaceship in SpaceshipStructures):
+            structure = SpaceShip(structure_name).array
+        else:
+            structure = self.random_init()
+
+        if self.grid_size < max(structure.shape):
+            raise ValueError(
+                f"The grid size isn't big enough to fit the chosen structure (shape = "
+                f"{structure.shape})"
+            )
+        if self.grid_size > max(structure.shape):
+            structure = padding(structure, self.grid_size, self.grid_size)
+
+        self.array = structure
+
+    def random_init(self) -> np.ndarray:
+        """Initializes a random grid."""
+
         random_grid: np.ndarray = np.random.choice(
             [0, 1], size=(self.grid_size, self.grid_size), p=[4.0 / 5, 1.0 / 5]
         )
-        self.array = random_grid
+        return random_grid
 
-    def init_beacon(self):
-        """Initializes a grid with a beacon."""
+    def find_living_cells(self) -> np.ndarray:
+        """Gets living cells positions."""
 
-        beacon: np.ndarray = Beacon().array
+        return np.argwhere(self.array == 1)
 
-        if self.grid_size < max(beacon.shape):
-            raise ValueError(
-                f"The grid size isn't big enough to fit a beacon (shape = {beacon.shape})"
-            )
+    def get_cell_neighbors(self, x: int, y: int) -> set[tuple[int, int]]:
+        """Get cell's neighbors positions.
 
-        beacon = padding(beacon, self.grid_size, self.grid_size)
-        self.array = beacon
+        :param x: cell's x index.
+        :param y: cell's y index.
+        :return: cell's neighbors positions.
+        """
+        neighbors: set[tuple[int, int]] = set()
 
-    def init_blinker(self):
-        """Initializes a grid with a blinker."""
+        for i in range(max(0, x - 1), min(x + 1, self.grid_size - 1) + 1):
+            for j in range(max(0, y - 1), min(y + 1, self.grid_size - 1) + 1):
+                if (i, j) == (x, y):
+                    pass
+                else:
+                    neighbors.add((i, j))
 
-        blinker: np.ndarray = Blinker().array
-
-        if self.grid_size < max(blinker.shape):
-            raise ValueError(
-                f"The grid size isn't big enough to fit a blinker (shape = {blinker.shape})"
-            )
-
-        blinker = padding(blinker, self.grid_size, self.grid_size)
-        self.array = blinker
-
-    def init_toad(self):
-        """Initializes a grid with a blinker."""
-
-        toad: np.ndarray = Toad().array
-
-        if self.grid_size < max(toad.shape):
-            raise ValueError(f"The grid size isn't big enough to fit a toad (shape = {toad.shape})")
-
-        toad = padding(toad, self.grid_size, self.grid_size)
-        self.array = toad
-
-    def init_pulsar(self):
-        """Initializes a grid with a pulsar."""
-
-        pulsar: np.ndarray = Pulsar().array
-
-        if self.grid_size < max(pulsar.shape):
-            raise ValueError(
-                f"The grid size isn't big enough to fit a pulsar (shape: {pulsar.shape})"
-            )
-
-        pulsar = padding(pulsar, self.grid_size, self.grid_size)
-        self.array = pulsar
+        return neighbors
