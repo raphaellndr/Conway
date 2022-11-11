@@ -34,6 +34,13 @@ class Initialization(Enum):
 def _get_neighbors_by_status(
     grid: Grid, neighbors: set[tuple], *, status: CellStatus
 ) -> set[tuple]:
+    """Sorts neighbors by their status.
+
+    :param grid: grid containing the neighbors' values.
+    :param neighbors: neighbors to check.
+    :param status: status to check.
+    :return: set of sorted neighbors.
+    """
     status_neighbors: set[tuple] = {
         cell_neighbor for cell_neighbor in neighbors if grid.array[cell_neighbor] == status.value
     }
