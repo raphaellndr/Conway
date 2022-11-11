@@ -1,6 +1,5 @@
 """This module contains the core of the app."""
 
-import time
 
 import numpy as np
 import typer
@@ -27,11 +26,7 @@ def conway(
     while True:
         print(grid_array)
 
-        start = time.time()
-
         grid_array, tmp_living_cells = update_grid(grid_array, living_cells, tmp_living_cells)
-
-        print(time.time() - start)
 
 
 def run() -> None:
