@@ -5,7 +5,7 @@ from enum import Enum
 
 import typer
 
-from .grid.grid import Grid
+from .grid.grid import CellStatus, Grid
 
 
 class Initialization(Enum):
@@ -31,6 +31,15 @@ class Initialization(Enum):
     HWSS = "hwss"
 
 
+def _get_neighbors_by_status(
+    grid: Grid, neighbors: set[tuple], *, status: CellStatus
+) -> set[tuple]:
+    status_neighbors: set[tuple] = {
+        cell_neighbor for cell_neighbor in neighbors if grid.array[cell_neighbor] == status.value
+    }
+    return status_neighbors
+
+
 def conway(
     grid_size: int = typer.Option(10, help="Size of the grid created."),
     initialization: Initialization = typer.Option(
@@ -38,6 +47,7 @@ def conway(
     ),
 ) -> None:
     """TODO: write docstring"""
+
     grid = Grid(grid_size)
 
     grid.grid_init(initialization.value)
@@ -52,16 +62,12 @@ def conway(
         for living_cell in tmp_living_cells:
             living_cell_neighbors: set[tuple] = grid.get_cell_neighbors(*living_cell)
 
-            living_cell_living_neighbors: set[tuple] = {
-                cell_neighbor
-                for cell_neighbor in living_cell_neighbors
-                if grid.array[cell_neighbor] == 1
-            }
-            living_cell_dead_neighbors: set[tuple] = {
-                cell_neighbor
-                for cell_neighbor in living_cell_neighbors
-                if grid.array[cell_neighbor] == 0
-            }
+            living_cell_living_neighbors: set[tuple] = _get_neighbors_by_status(
+                grid, living_cell_neighbors, status=CellStatus.ALIVE
+            )
+            living_cell_dead_neighbors: set[tuple] = _get_neighbors_by_status(
+                grid, living_cell_neighbors, status=CellStatus.DEAD
+            )
 
             if len(living_cell_living_neighbors) < 2 or len(living_cell_living_neighbors) > 3:
                 living_cells.remove(tuple(living_cell))
@@ -69,11 +75,9 @@ def conway(
             for dead_neighbor in living_cell_dead_neighbors:
                 dead_cell_neighbors: set[tuple] = grid.get_cell_neighbors(*dead_neighbor)
 
-                dead_cell_living_neighbors: set[tuple] = {
-                    cell_neighbor
-                    for cell_neighbor in dead_cell_neighbors
-                    if grid.array[cell_neighbor] == 1
-                }
+                dead_cell_living_neighbors: set[tuple] = _get_neighbors_by_status(
+                    grid, dead_cell_neighbors, status=CellStatus.ALIVE
+                )
 
                 if len(dead_cell_living_neighbors) == 3:
                     living_cells.add(tuple(dead_neighbor))

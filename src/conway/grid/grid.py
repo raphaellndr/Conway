@@ -1,4 +1,5 @@
 """This module contains the definition of a Grid."""
+from enum import Enum
 
 import numpy as np
 import typer
@@ -13,6 +14,13 @@ from .structures import (
     Stabilized,
     StabilizedStructures,
 )
+
+
+class CellStatus(Enum):
+    """Enumerate different types of cell's status."""
+
+    ALIVE = 1
+    DEAD = 0
 
 
 class Grid:
