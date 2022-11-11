@@ -3,9 +3,11 @@
 import time
 from enum import Enum
 
+import numpy as np
 import typer
 
-from .grid.grid import CellStatus, Grid
+from .grid.cell import CellStatus, find_living_cells, get_neighbors, get_neighbors_by_status
+from .grid.grid import Grid
 
 
 class Initialization(Enum):
@@ -31,22 +33,6 @@ class Initialization(Enum):
     HWSS = "hwss"
 
 
-def _get_neighbors_by_status(
-    grid: Grid, neighbors: set[tuple], *, status: CellStatus
-) -> set[tuple]:
-    """Sorts neighbors by their status.
-
-    :param grid: grid containing the neighbors' values.
-    :param neighbors: neighbors to check.
-    :param status: status to check.
-    :return: set of sorted neighbors.
-    """
-    status_neighbors: set[tuple] = {
-        cell_neighbor for cell_neighbor in neighbors if grid.array[cell_neighbor] == status.value
-    }
-    return status_neighbors
-
-
 def conway(
     grid_size: int = typer.Option(10, help="Size of the grid created."),
     initialization: Initialization = typer.Option(
@@ -57,43 +43,43 @@ def conway(
 
     grid = Grid(grid_size)
 
-    grid.grid_init(initialization.value)
+    grid_array: np.ndarray = grid.grid_init(initialization.value)
 
-    living_cells: set[tuple] = grid.find_living_cells()
+    living_cells: set[tuple] = find_living_cells(grid_array)
 
     tmp_living_cells: set[tuple] = living_cells.copy()
     while True:
-        print(grid.array)
+        print(grid_array)
 
         start = time.time()
         for living_cell in tmp_living_cells:
-            living_cell_neighbors: set[tuple] = grid.get_cell_neighbors(*living_cell)
+            living_cell_neighbors: set[tuple] = get_neighbors(grid_array.shape, *living_cell)
 
-            living_cell_living_neighbors: set[tuple] = _get_neighbors_by_status(
-                grid, living_cell_neighbors, status=CellStatus.ALIVE
+            living_cell_living_neighbors: set[tuple] = get_neighbors_by_status(
+                grid_array, living_cell_neighbors, status=CellStatus.ALIVE
             )
-            living_cell_dead_neighbors: set[tuple] = _get_neighbors_by_status(
-                grid, living_cell_neighbors, status=CellStatus.DEAD
+            living_cell_dead_neighbors: set[tuple] = get_neighbors_by_status(
+                grid_array, living_cell_neighbors, status=CellStatus.DEAD
             )
 
             if len(living_cell_living_neighbors) < 2 or len(living_cell_living_neighbors) > 3:
                 living_cells.remove(tuple(living_cell))
 
             for dead_neighbor in living_cell_dead_neighbors:
-                dead_cell_neighbors: set[tuple] = grid.get_cell_neighbors(*dead_neighbor)
+                dead_cell_neighbors: set[tuple] = get_neighbors(grid_array.shape, *dead_neighbor)
 
-                dead_cell_living_neighbors: set[tuple] = _get_neighbors_by_status(
-                    grid, dead_cell_neighbors, status=CellStatus.ALIVE
+                dead_cell_living_neighbors: set[tuple] = get_neighbors_by_status(
+                    grid_array, dead_cell_neighbors, status=CellStatus.ALIVE
                 )
 
                 if len(dead_cell_living_neighbors) == 3:
                     living_cells.add(tuple(dead_neighbor))
 
         for cell in living_cells:
-            grid.array[cell] = 1
+            grid_array[cell] = 1
 
         for cell in tmp_living_cells - living_cells:
-            grid.array[cell] = 0
+            grid_array[cell] = 0
 
         tmp_living_cells = living_cells.copy()
         print(time.time() - start)
