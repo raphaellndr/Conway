@@ -1,4 +1,5 @@
 """This module contains the definition of a Grid."""
+from enum import Enum
 
 import numpy as np
 
@@ -11,6 +12,29 @@ from .structures import (
     Stabilized,
     StabilizedStructures,
 )
+
+
+class GridInitialization(Enum):
+    """All possible initializations."""
+
+    RANDOM = "random"
+
+    BLOCK = "block"
+    BEEHIVE = "beehive"
+    LOAF = "loaf"
+    BOAT = "boat"
+    TUB = "tub"
+
+    BEACON = "beacon"
+    BLINKER = "blinker"
+    TOAD = "toad"
+    PULSAR = "pulsar"
+    PENTA_DECATHLON = "penta_decathlon"
+
+    GLIDER = "glider"
+    LWSS = "lwss"
+    MWSS = "mwss"
+    HWSS = "hwss"
 
 
 class Grid:

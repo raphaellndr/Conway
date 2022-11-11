@@ -1,42 +1,18 @@
 """This module contains the core of the app."""
 
 import time
-from enum import Enum
 
 import numpy as np
 import typer
 
 from .grid.cell import CellStatus, find_living_cells, get_neighbors, get_neighbors_by_status
-from .grid.grid import Grid
-
-
-class Initialization(Enum):
-    """All possible initializations."""
-
-    RANDOM = "random"
-
-    BLOCK = "block"
-    BEEHIVE = "beehive"
-    LOAF = "loaf"
-    BOAT = "boat"
-    TUB = "tub"
-
-    BEACON = "beacon"
-    BLINKER = "blinker"
-    TOAD = "toad"
-    PULSAR = "pulsar"
-    PENTA_DECATHLON = "penta_decathlon"
-
-    GLIDER = "glider"
-    LWSS = "lwss"
-    MWSS = "mwss"
-    HWSS = "hwss"
+from .grid.grid import Grid, GridInitialization
 
 
 def conway(
     grid_size: int = typer.Option(10, help="Size of the grid created."),
-    initialization: Initialization = typer.Option(
-        Initialization.RANDOM.value, help="Type of initialization."
+    initialization: GridInitialization = typer.Option(
+        GridInitialization.RANDOM.value, help="Type of initialization."
     ),
 ) -> None:
     """TODO: write docstring"""
@@ -46,8 +22,8 @@ def conway(
     grid_array: np.ndarray = grid.grid_init(initialization.value)
 
     living_cells: set[tuple] = find_living_cells(grid_array)
-
     tmp_living_cells: set[tuple] = living_cells.copy()
+
     while True:
         print(grid_array)
 
