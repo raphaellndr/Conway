@@ -3,7 +3,6 @@
 import time
 from enum import Enum
 
-import numpy as np
 import typer
 
 from .grid.grid import Grid
@@ -43,43 +42,49 @@ def conway(
 
     grid.grid_init(initialization.value)
 
-    tmp_array: np.ndarray = grid.array.copy()
+    living_cells: set[tuple] = grid.find_living_cells()
+
+    tmp_living_cells: set[tuple] = living_cells.copy()
     while True:
         print(grid.array)
+
         start = time.time()
-        living_cells: np.ndarray = grid.find_living_cells()
+        for living_cell in tmp_living_cells:
+            living_cell_neighbors: set[tuple] = grid.get_cell_neighbors(*living_cell)
 
-        for living_cell in living_cells:
-            living_cell_neighbors: set[tuple[int, int]] = grid.get_cell_neighbors(*living_cell)
-
-            living_cell_living_neighbors: set[tuple[int, int]] = {
+            living_cell_living_neighbors: set[tuple] = {
                 cell_neighbor
                 for cell_neighbor in living_cell_neighbors
                 if grid.array[cell_neighbor] == 1
             }
-            living_cell_dead_neighbors: set[tuple[int, int]] = {
+            living_cell_dead_neighbors: set[tuple] = {
                 cell_neighbor
                 for cell_neighbor in living_cell_neighbors
                 if grid.array[cell_neighbor] == 0
             }
 
             if len(living_cell_living_neighbors) < 2 or len(living_cell_living_neighbors) > 3:
-                tmp_array[tuple(living_cell)] = 0
+                living_cells.remove(tuple(living_cell))
 
             for dead_neighbor in living_cell_dead_neighbors:
-                dead_cell_neighbors: set[tuple[int, int]] = grid.get_cell_neighbors(*dead_neighbor)
+                dead_cell_neighbors: set[tuple] = grid.get_cell_neighbors(*dead_neighbor)
 
-                dead_cell_living_neighbors: set[tuple[int, int]] = {
+                dead_cell_living_neighbors: set[tuple] = {
                     cell_neighbor
                     for cell_neighbor in dead_cell_neighbors
                     if grid.array[cell_neighbor] == 1
                 }
 
                 if len(dead_cell_living_neighbors) == 3:
-                    tmp_array[tuple(dead_neighbor)] = 1
+                    living_cells.add(tuple(dead_neighbor))
 
-        grid.array = tmp_array
-        tmp_array = grid.array.copy()
+        for cell in living_cells:
+            grid.array[cell] = 1
+
+        for cell in tmp_living_cells - living_cells:
+            grid.array[cell] = 0
+
+        tmp_living_cells = living_cells.copy()
         print(time.time() - start)
 
 
