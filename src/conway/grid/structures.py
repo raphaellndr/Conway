@@ -1,4 +1,4 @@
-"""This module contains definition of different structures."""
+"""This module contains definitions of different structures."""
 
 from enum import Enum
 
