@@ -1,6 +1,5 @@
 """This module contains the core of the app."""
 
-
 import numpy as np
 import typer
 
@@ -21,11 +20,10 @@ def conway(
     grid_array: np.ndarray = grid.grid_init(initialization.value)
 
     living_cells: set[tuple] = find_living_cells(grid_array)
-    tmp_living_cells: set[tuple] = living_cells.copy()
 
     while grid_array.any():
         print(grid_array)
-        grid_array, tmp_living_cells = update_grid(grid_array, living_cells, tmp_living_cells)
+        grid_array, living_cells = update_grid(grid_array, living_cells)
 
 
 def run() -> None:

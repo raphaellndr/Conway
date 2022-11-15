@@ -41,16 +41,14 @@ class GridInitialization(Enum):
     HWSS = "hwss"
 
 
-def update_grid(
-    array: np.ndarray, living_cells: set[tuple], tmp_living_cells: set[tuple]
-) -> tuple[np.ndarray, set[tuple]]:
+def update_grid(array: np.ndarray, living_cells: set[tuple]) -> tuple[np.ndarray, set[tuple]]:
     """Updates the grid according to the different rules.
 
     :param array: grid array.
     :param living_cells: positions of the living cells.
-    :param tmp_living_cells: copy of living_cells.
     :return: updated grid and the positions of the living cells.
     """
+    tmp_living_cells: set[tuple] = living_cells.copy()
     for living_cell in tmp_living_cells:
         living_cell_neighbors: set[tuple] = get_neighbors(array.shape, *living_cell)
 
@@ -80,9 +78,7 @@ def update_grid(
     for cell in tmp_living_cells - living_cells:
         array[cell] = 0
 
-    tmp_living_cells = living_cells.copy()
-
-    return array, tmp_living_cells
+    return array, living_cells
 
 
 class Grid:
