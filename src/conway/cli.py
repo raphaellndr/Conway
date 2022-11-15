@@ -6,7 +6,6 @@ import typer
 
 from .grid.cell import find_living_cells
 from .grid.grid import Grid, GridInitialization, update_grid
-from .transform.array import split
 
 
 def conway(
@@ -14,7 +13,6 @@ def conway(
     initialization: GridInitialization = typer.Option(
         GridInitialization.RANDOM.value, help="Type of initialization."
     ),
-    jobs: int = typer.Option(None, help="Number of subprocesses used."),
 ) -> None:
     """TODO: write docstring"""
 
@@ -22,17 +20,11 @@ def conway(
 
     grid_array: np.ndarray = grid.grid_init(initialization.value)
 
-    chunks: list[np.ndarray] = split(grid_array, jobs)
-
-    for chunk in chunks:
-        print(chunk)
-
     living_cells: set[tuple] = find_living_cells(grid_array)
     tmp_living_cells: set[tuple] = living_cells.copy()
 
-    while True:
+    while grid_array.any():
         print(grid_array)
-
         grid_array, tmp_living_cells = update_grid(grid_array, living_cells, tmp_living_cells)
 
 

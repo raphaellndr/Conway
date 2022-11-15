@@ -19,6 +19,8 @@ from .structures import (
 class GridInitialization(Enum):
     """All possible initializations."""
 
+    value: str
+
     RANDOM = "random"
 
     BLOCK = "block"
@@ -119,6 +121,6 @@ class Grid:
         """Initializes a random grid."""
 
         random_grid: np.ndarray = np.random.choice(
-            [0, 1], size=(self.grid_size, self.grid_size), p=[4.0 / 5, 1.0 / 5]
+            [0, 1], size=(self.grid_size, self.grid_size), p=[3.0 / 5, 2.0 / 5]
         )
         return random_grid

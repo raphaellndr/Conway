@@ -56,9 +56,9 @@ def find_living_cells(array: np.ndarray) -> set[tuple]:
     positions: set[tuple] = set()
     living_cells_pos: np.ndarray = np.argwhere(array == 1)
 
-    if living_cells_pos.any():
+    if not living_cells_pos.any():
         logger.info("No living cells found: exiting program")
-        typer.Exit(0)
+        typer.Exit()
 
     for pos in living_cells_pos:
         positions.add(tuple(pos))
