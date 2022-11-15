@@ -39,17 +39,15 @@ class GridInitialization(Enum):
     HWSS = "hwss"
 
 
-def update_grid(
-    array: np.ndarray, living_cells: set[tuple], tmp_living_cells: set[tuple]
-) -> tuple[np.ndarray, set[tuple]]:
+def update_positions(array: np.ndarray, living_cells: set[tuple]) -> tuple[set[tuple], set[tuple]]:
     """Updates the grid according to the different rules.
 
     :param array: grid array.
-    :param living_cells: positions of the living cells.
-    :param tmp_living_cells: copy of living_cells.
-    :return: updated grid and the positions of the living cells.
+    :param living_cells: living cells positions.
+    :return: positions of the living cells.
     """
-    for living_cell in tmp_living_cells:
+    prev_living_cells: set[tuple] = living_cells.copy()
+    for living_cell in prev_living_cells:
         living_cell_neighbors: set[tuple] = get_neighbors(array.shape, *living_cell)
 
         living_cell_living_neighbors: set[tuple] = get_neighbors_by_status(
@@ -71,16 +69,25 @@ def update_grid(
 
             if len(dead_cell_living_neighbors) == 3:
                 living_cells.add(tuple(dead_neighbor))
+    return living_cells, prev_living_cells
 
+
+def update_grid(
+    array: np.ndarray, living_cells: set[tuple], prev_living_cells: set[tuple]
+) -> np.ndarray:
+    """Updates the grid array.
+
+    :param array: grid to update.
+    :param living_cells: current living cells.
+    :param prev_living_cells: previous living cells.
+    """
     for cell in living_cells:
         array[cell] = 1
 
-    for cell in tmp_living_cells - living_cells:
+    for cell in prev_living_cells - living_cells:
         array[cell] = 0
 
-    tmp_living_cells = living_cells.copy()
-
-    return array, tmp_living_cells
+    return array
 
 
 class Grid:
@@ -119,6 +126,6 @@ class Grid:
         """Initializes a random grid."""
 
         random_grid: np.ndarray = np.random.choice(
-            [0, 1], size=(self.grid_size, self.grid_size), p=[4.0 / 5, 1.0 / 5]
+            [0, 1], size=(self.grid_size, self.grid_size), p=[3.0 / 5, 2.0 / 5]
         )
         return random_grid

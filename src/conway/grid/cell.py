@@ -3,8 +3,6 @@
 from enum import Enum
 
 import numpy as np
-import typer
-from loguru import logger
 
 
 class CellStatus(Enum):
@@ -51,14 +49,13 @@ def get_neighbors_by_status(
 
 
 def find_living_cells(array: np.ndarray) -> set[tuple]:
-    """Gets living cells positions."""
+    """Gets living cells positions.
+
+    :param array: array to look for living cells into.
+    """
 
     positions: set[tuple] = set()
     living_cells_pos: np.ndarray = np.argwhere(array == 1)
-
-    if living_cells_pos.any():
-        logger.info("No living cells found: exiting program")
-        typer.Exit(0)
 
     for pos in living_cells_pos:
         positions.add(tuple(pos))

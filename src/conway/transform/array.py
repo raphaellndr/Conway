@@ -24,11 +24,12 @@ def padding(array: np.ndarray, desired_h: int, desired_w: int):
     return np.pad(array, pad_width=((a, aa), (b, bb)), mode="constant")
 
 
-def split(array: np.ndarray, n_chunks: int) -> list[np.ndarray]:
+def split(array: np.ndarray, *, n_chunks: int, offset: int = 0) -> list[np.ndarray]:
     """Splits a matrix into sub-matrices.
 
     :param array: array to split.
     :param n_chunks: number of chunks to slit the array into.
+    :param offset: chunk's sides offset.
     :return: list of chunks.
     """
 
@@ -39,8 +40,12 @@ def split(array: np.ndarray, n_chunks: int) -> list[np.ndarray]:
         for j in range(array.shape[1] // dimension):
             chunks.append(
                 array[
-                    max(0, dimension * i - 1) : min(dimension * (i + 1) + 1, array.shape[0]),
-                    max(0, dimension * j - 1) : min(dimension * (j + 1) + 1, array.shape[0]),
+                    max(0, dimension * i - offset) : min(
+                        dimension * (i + 1) + offset, array.shape[0]
+                    ),
+                    max(0, dimension * j - offset) : min(
+                        dimension * (j + 1) + offset, array.shape[0]
+                    ),
                 ]
             )
 
