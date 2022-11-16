@@ -5,7 +5,7 @@ from enum import Enum
 import numpy as np
 
 from ..transform.array import padding
-from .cell import CellStatus, get_neighbors, get_neighbors_by_status
+from .cell import get_neighbors
 from .structures import (
     OscillatingStructures,
     Oscillator,
@@ -48,15 +48,15 @@ def update_grid(array: np.ndarray, living_cells: set[tuple]) -> tuple[np.ndarray
     :param living_cells: positions of the living cells.
     :return: updated grid and the positions of the living cells.
     """
-    tmp_living_cells: set[tuple] = living_cells.copy()
-    for living_cell in tmp_living_cells:
+    prev_living_cells: set[tuple] = living_cells.copy()
+    for living_cell in prev_living_cells:
         living_cell_neighbors: set[tuple] = get_neighbors(array.shape, *living_cell)
 
-        living_cell_living_neighbors: set[tuple] = get_neighbors_by_status(
-            array, living_cell_neighbors, status=CellStatus.ALIVE
+        living_cell_living_neighbors: set[tuple] = living_cell_neighbors.intersection(
+            prev_living_cells
         )
-        living_cell_dead_neighbors: set[tuple] = get_neighbors_by_status(
-            array, living_cell_neighbors, status=CellStatus.DEAD
+        living_cell_dead_neighbors: set[tuple] = (
+            living_cell_neighbors - living_cell_living_neighbors
         )
 
         if len(living_cell_living_neighbors) < 2 or len(living_cell_living_neighbors) > 3:
@@ -65,8 +65,8 @@ def update_grid(array: np.ndarray, living_cells: set[tuple]) -> tuple[np.ndarray
         for dead_neighbor in living_cell_dead_neighbors:
             dead_cell_neighbors: set[tuple] = get_neighbors(array.shape, *dead_neighbor)
 
-            dead_cell_living_neighbors: set[tuple] = get_neighbors_by_status(
-                array, dead_cell_neighbors, status=CellStatus.ALIVE
+            dead_cell_living_neighbors: set[tuple] = dead_cell_neighbors.intersection(
+                prev_living_cells
             )
 
             if len(dead_cell_living_neighbors) == 3:
@@ -75,7 +75,7 @@ def update_grid(array: np.ndarray, living_cells: set[tuple]) -> tuple[np.ndarray
     for cell in living_cells:
         array[cell] = 1
 
-    for cell in tmp_living_cells - living_cells:
+    for cell in prev_living_cells - living_cells:
         array[cell] = 0
 
     return array, living_cells
@@ -117,6 +117,6 @@ class Grid:
         """Initializes a random grid."""
 
         random_grid: np.ndarray = np.random.choice(
-            [0, 1], size=(self.grid_size, self.grid_size), p=[3.0 / 5, 2.0 / 5]
+            [0, 1], size=(self.grid_size, self.grid_size), p=[4.0 / 5, 1.0 / 5]
         )
         return random_grid

@@ -24,6 +24,7 @@ def conway(
     while grid_array.any():
         print(grid_array)
         grid_array, living_cells = update_grid(grid_array, living_cells)
+        print(len(living_cells))
 
 
 def run() -> None:

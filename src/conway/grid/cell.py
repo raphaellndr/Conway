@@ -1,17 +1,8 @@
 """This module contains useful functions to get a cell's information"""
 
-from enum import Enum
-
 import numpy as np
 import typer
 from loguru import logger
-
-
-class CellStatus(Enum):
-    """Enumerate different types of cell's status."""
-
-    ALIVE = 1
-    DEAD = 0
 
 
 def get_neighbors(array_shape: tuple, x: int, y: int) -> set[tuple]:
@@ -32,22 +23,6 @@ def get_neighbors(array_shape: tuple, x: int, y: int) -> set[tuple]:
                 neighbors.add((i, j))
 
     return neighbors
-
-
-def get_neighbors_by_status(
-    array: np.ndarray, neighbors: set[tuple], *, status: CellStatus
-) -> set[tuple]:
-    """Sorts neighbors by their status.
-
-    :param array: array containing the neighbors' values.
-    :param neighbors: neighbors to check.
-    :param status: status to check.
-    :return: set of sorted neighbors.
-    """
-    status_neighbors: set[tuple] = {
-        cell_neighbor for cell_neighbor in neighbors if array[cell_neighbor] == status.value
-    }
-    return status_neighbors
 
 
 def find_living_cells(array: np.ndarray) -> set[tuple]:
