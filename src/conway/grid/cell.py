@@ -1,8 +1,6 @@
 """This module contains useful functions to get a cell's information"""
 
 import numpy as np
-import typer
-from loguru import logger
 
 
 def get_neighbors(array_shape: tuple, x: int, y: int) -> set[tuple]:
@@ -26,14 +24,13 @@ def get_neighbors(array_shape: tuple, x: int, y: int) -> set[tuple]:
 
 
 def find_living_cells(array: np.ndarray) -> set[tuple]:
-    """Gets living cells positions."""
+    """Gets living cells positions.
+
+    :param array: array to look for living cells into.
+    """
 
     positions: set[tuple] = set()
     living_cells_pos: np.ndarray = np.argwhere(array == 1)
-
-    if not living_cells_pos.any():
-        logger.info("No living cells found: exiting program")
-        typer.Exit()
 
     for pos in living_cells_pos:
         positions.add(tuple(pos))
