@@ -32,22 +32,6 @@ def get_neighbors(array_shape: tuple, x: int, y: int) -> set[tuple]:
     return neighbors
 
 
-def get_neighbors_by_status(
-    array: np.ndarray, neighbors: set[tuple], *, status: CellStatus
-) -> set[tuple]:
-    """Sorts neighbors by their status.
-
-    :param array: array containing the neighbors' values.
-    :param neighbors: neighbors to check.
-    :param status: status to check.
-    :return: set of sorted neighbors.
-    """
-    status_neighbors: set[tuple] = {
-        cell_neighbor for cell_neighbor in neighbors if array[cell_neighbor] == status.value
-    }
-    return status_neighbors
-
-
 def find_living_cells(array: np.ndarray) -> set[tuple]:
     """Gets living cells positions.
 

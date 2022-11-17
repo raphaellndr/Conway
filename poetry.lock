@@ -8,6 +8,7 @@ python-versions = ">=3.7.2"
 
 [package.dependencies]
 lazy-object-proxy = ">=1.4.0"
+typing-extensions = {version = ">=3.10", markers = "python_version < \"3.10\""}
 wrapt = {version = ">=1.11,<2", markers = "python_version < \"3.11\""}
 
 [[package]]
@@ -50,6 +51,7 @@ mypy-extensions = ">=0.4.3"
 pathspec = ">=0.9.0"
 platformdirs = ">=2"
 tomli = {version = ">=1.1.0", markers = "python_full_version < \"3.11.0a7\""}
+typing-extensions = {version = ">=3.10.0.0", markers = "python_version < \"3.10\""}
 
 [package.extras]
 colorama = ["colorama (>=0.4.3)"]
@@ -105,7 +107,7 @@ python-versions = "*"
 
 [[package]]
 name = "exceptiongroup"
-version = "1.0.1"
+version = "1.0.4"
 description = "Backport of PEP 654 (exception groups)"
 category = "dev"
 optional = false
@@ -125,19 +127,6 @@ python-versions = ">=3.7"
 [package.extras]
 docs = ["furo (>=2022.6.21)", "sphinx (>=5.1.1)", "sphinx-autodoc-typehints (>=1.19.1)"]
 testing = ["covdefaults (>=2.2)", "coverage (>=6.4.2)", "pytest (>=7.1.2)", "pytest-cov (>=3)", "pytest-timeout (>=2.1)"]
-
-[[package]]
-name = "flake8"
-version = "5.0.4"
-description = "the modular source code checker: pep8 pyflakes and co"
-category = "dev"
-optional = false
-python-versions = ">=3.6.1"
-
-[package.dependencies]
-mccabe = ">=0.7.0,<0.8.0"
-pycodestyle = ">=2.9.0,<2.10.0"
-pyflakes = ">=2.5.0,<2.6.0"
 
 [[package]]
 name = "identify"
@@ -194,6 +183,21 @@ win32-setctime = {version = ">=1.0.0", markers = "sys_platform == \"win32\""}
 
 [package.extras]
 dev = ["colorama (>=0.3.4)", "docutils (==0.16)", "flake8 (>=3.7.7)", "tox (>=3.9.0)", "pytest (>=4.6.2)", "pytest-cov (>=2.7.1)", "black (>=19.10b0)", "isort (>=5.1.1)", "Sphinx (>=4.1.1)", "sphinx-autobuild (>=0.7.1)", "sphinx-rtd-theme (>=0.4.3)"]
+
+[[package]]
+name = "maturin"
+version = "0.13.7"
+description = "Build and publish crates with pyo3, rust-cpython and cffi bindings as well as rust binaries as python packages"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+tomli = {version = ">=1.1.0", markers = "python_version < \"3.11\""}
+
+[package.extras]
+zig = ["ziglang (>=0.9.0,<0.10.0)"]
+patchelf = ["patchelf"]
 
 [[package]]
 name = "mccabe"
@@ -259,7 +263,7 @@ pyparsing = ">=2.0.2,<3.0.5 || >3.0.5"
 
 [[package]]
 name = "pathspec"
-version = "0.10.1"
+version = "0.10.2"
 description = "Utility library for gitignore style pattern matching of file paths."
 category = "dev"
 optional = false
@@ -267,7 +271,7 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "platformdirs"
-version = "2.5.3"
+version = "2.5.4"
 description = "A small Python package for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
 category = "dev"
 optional = false
@@ -306,14 +310,6 @@ toml = "*"
 virtualenv = ">=20.0.8"
 
 [[package]]
-name = "pycodestyle"
-version = "2.9.1"
-description = "Python style guide checker"
-category = "dev"
-optional = false
-python-versions = ">=3.6"
-
-[[package]]
 name = "pyflakes"
 version = "2.5.0"
 description = "passive checker of Python programs"
@@ -338,6 +334,7 @@ mccabe = ">=0.6,<0.8"
 platformdirs = ">=2.2.0"
 tomli = {version = ">=1.1.0", markers = "python_version < \"3.11\""}
 tomlkit = ">=0.10.1"
+typing-extensions = {version = ">=3.10.0", markers = "python_version < \"3.10\""}
 
 [package.extras]
 spelling = ["pyenchant (>=3.2,<4.0)"]
@@ -383,6 +380,14 @@ optional = false
 python-versions = ">=3.6"
 
 [[package]]
+name = "ruff"
+version = "0.0.120"
+description = "An extremely fast Python linter, written in Rust."
+category = "dev"
+optional = false
+python-versions = ">=3.7"
+
+[[package]]
 name = "toml"
 version = "0.10.2"
 description = "Python Library for Tom's Obvious, Minimal Language"
@@ -394,7 +399,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 name = "tomli"
 version = "2.0.1"
 description = "A lil' TOML parser"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -433,7 +438,7 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "virtualenv"
-version = "20.16.6"
+version = "20.16.7"
 description = "Virtual Python Environment builder"
 category = "dev"
 optional = false
@@ -469,8 +474,8 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 
 [metadata]
 lock-version = "1.1"
-python-versions = "~3.10"
-content-hash = "e2eeb02330f047f06725c5a44cfb5e37d1167071a5dbc560a3ea5428babfa1fe"
+python-versions = "~3.9"
+content-hash = "6a3322a0ce699d2b2364de5349784173b6cdf5277fdd3b35286948c1ed907799"
 
 [metadata.files]
 astroid = []
@@ -484,12 +489,12 @@ dill = []
 distlib = []
 exceptiongroup = []
 filelock = []
-flake8 = []
 identify = []
 iniconfig = []
 isort = []
 lazy-object-proxy = []
 loguru = []
+maturin = []
 mccabe = []
 mypy = []
 mypy-extensions = []
@@ -500,12 +505,12 @@ pathspec = []
 platformdirs = []
 pluggy = []
 pre-commit = []
-pycodestyle = []
 pyflakes = []
 pylint = []
 pyparsing = []
 pytest = []
 pyyaml = []
+ruff = []
 toml = []
 tomli = []
 tomlkit = []

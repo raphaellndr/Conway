@@ -1,4 +1,5 @@
 """This module contains the core of the app."""
+
 import random
 from multiprocessing import Pool
 
@@ -25,35 +26,33 @@ def conway(
     initialization: GridInitialization = typer.Option(
         GridInitialization.RANDOM.value, help="Type of initialization."
     ),
-    jobs: int = typer.Option(None, help="Number of subprocesses used."),
+    jobs: int = typer.Option(1, help="Number of subprocesses used."),
 ) -> None:
     """TODO: write docstring"""
 
     grid: Grid = Grid(grid_size)
-
     grid_array: np.ndarray = grid.grid_init(initialization.value)
 
     living_cells: set[tuple] = find_living_cells(grid_array)
-    living_cells_subsets = _create_subsets(living_cells, jobs)
+    living_cells_subsets = _create_subsets(living_cells.copy(), jobs)
 
-    while grid_array.any():
-        print(grid_array)
+    with Pool(jobs) as pool:
+        while grid_array.any():
+            print(grid_array)
 
-        args = [(grid_array, subset) for subset in living_cells_subsets]
+            args = [(grid_array, living_cells, subset) for subset in living_cells_subsets]
 
-        with Pool(jobs) as pool:
             result = pool.starmap(update_positions, args)
-        pool.join()
 
-        living_cells = set()
-        prev_living_cells = set()
-        for res in result:
-            living_cells.update(res[0])
-            prev_living_cells.update(res[1])
+            living_cells = set()
+            prev_living_cells = set()
+            for res in result:
+                living_cells.update(res[0])
+                prev_living_cells.update(res[1])
 
-        grid_array = update_grid(grid_array, living_cells, prev_living_cells)
+            grid_array = update_grid(grid_array, living_cells, prev_living_cells)
 
-        living_cells_subsets = _create_subsets(living_cells, jobs)
+            living_cells_subsets = _create_subsets(living_cells.copy(), jobs)
 
 
 def run() -> None:

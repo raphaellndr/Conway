@@ -5,7 +5,7 @@ from enum import Enum
 import numpy as np
 
 from ..transform.array import padding
-from .cell import CellStatus, get_neighbors, get_neighbors_by_status
+from .cell import get_neighbors
 from .structures import (
     OscillatingStructures,
     Oscillator,
@@ -39,37 +39,37 @@ class GridInitialization(Enum):
     HWSS = "hwss"
 
 
-def update_positions(array: np.ndarray, living_cells: set[tuple]) -> tuple[set[tuple], set[tuple]]:
+def update_positions(
+    array: np.ndarray, living_cells: set[tuple], subset_living_cells: set[tuple]
+) -> tuple[set[tuple], set[tuple]]:
     """Updates the grid according to the different rules.
 
     :param array: grid array.
     :param living_cells: living cells positions.
+    :param subset_living_cells: subset of living cells positions.
     :return: positions of the living cells.
     """
-    prev_living_cells: set[tuple] = living_cells.copy()
+    prev_living_cells: set[tuple] = subset_living_cells.copy()
     for living_cell in prev_living_cells:
         living_cell_neighbors: set[tuple] = get_neighbors(array.shape, *living_cell)
 
-        living_cell_living_neighbors: set[tuple] = get_neighbors_by_status(
-            array, living_cell_neighbors, status=CellStatus.ALIVE
-        )
-        living_cell_dead_neighbors: set[tuple] = get_neighbors_by_status(
-            array, living_cell_neighbors, status=CellStatus.DEAD
+        living_cell_living_neighbors: set[tuple] = living_cell_neighbors.intersection(living_cells)
+        living_cell_dead_neighbors: set[tuple] = (
+            living_cell_neighbors - living_cell_living_neighbors
         )
 
         if len(living_cell_living_neighbors) < 2 or len(living_cell_living_neighbors) > 3:
-            living_cells.remove(tuple(living_cell))
+            subset_living_cells.remove(tuple(living_cell))
 
         for dead_neighbor in living_cell_dead_neighbors:
             dead_cell_neighbors: set[tuple] = get_neighbors(array.shape, *dead_neighbor)
 
-            dead_cell_living_neighbors: set[tuple] = get_neighbors_by_status(
-                array, dead_cell_neighbors, status=CellStatus.ALIVE
-            )
+            dead_cell_living_neighbors: set[tuple] = dead_cell_neighbors.intersection(living_cells)
 
             if len(dead_cell_living_neighbors) == 3:
-                living_cells.add(tuple(dead_neighbor))
-    return living_cells, prev_living_cells
+                subset_living_cells.add(tuple(dead_neighbor))
+
+    return subset_living_cells, prev_living_cells
 
 
 def update_grid(
@@ -126,6 +126,6 @@ class Grid:
         """Initializes a random grid."""
 
         random_grid: np.ndarray = np.random.choice(
-            [0, 1], size=(self.grid_size, self.grid_size), p=[3.0 / 5, 2.0 / 5]
+            [0, 1], size=(self.grid_size, self.grid_size), p=[4.0 / 5, 1.0 / 5]
         )
         return random_grid
