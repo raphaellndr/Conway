@@ -5,6 +5,8 @@ from multiprocessing import Pool
 
 import numpy as np
 import typer
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
 
 from .grid.cell import find_living_cells
 from .grid.grid import Grid, GridInitialization, update_grid, update_positions
@@ -43,22 +45,29 @@ def _get_pool_result(result: list[tuple[set[tuple], set[tuple]]]) -> tuple[set, 
     return living_cells, prev_living_cells
 
 
+grid: Grid = Grid(200)
+grid_array: np.ndarray = grid.grid_init(GridInitialization.RANDOM)
+living_cells: set[tuple] = find_living_cells(grid_array)
+prev_living_cells = living_cells.copy()
+
+
 def conway(
     grid_size: int = typer.Option(10, help="Size of the grid created."),
     initialization: GridInitialization = typer.Option(
-        GridInitialization.RANDOM, help="Type of initialization."
+        GridInitialization.RANDOM.value, help="Type of initialization."
     ),
     jobs: int = typer.Option(1, help="Number of subprocesses used."),
 ) -> None:
     """TODO: write docstring"""
-    grid: Grid = Grid(grid_size)
-    grid_array: np.ndarray = grid.grid_init(initialization)
 
-    living_cells: set[tuple] = find_living_cells(grid_array)
+    fig = plt.figure()
+    global grid_array
+    im = plt.imshow(grid_array, cmap="binary")
 
     with Pool(jobs) as pool:
-        while grid_array.any():
-            print(grid_array)
+
+        def update_cells():
+            global living_cells, prev_living_cells
 
             living_cells_subsets = _create_subsets(living_cells.copy(), jobs)
             args = [(grid_array, living_cells, subset) for subset in living_cells_subsets]
@@ -67,7 +76,19 @@ def conway(
 
             living_cells, prev_living_cells = _get_pool_result(result)
 
+        def update_array():
+            global grid_array
             grid_array = update_grid(grid_array, living_cells, prev_living_cells)
+
+        def animate(i, im):
+            print("animating")
+            update_cells()
+            update_array()
+            im.set_data(grid_array)
+            return im
+
+        _ = FuncAnimation(fig, animate, fargs=(im,), interval=0.001)
+        plt.show()
 
 
 def run() -> None:

@@ -83,3 +83,7 @@ select = ["E", "F"]
 
 [tool.mypy]
 files = ["src/conway"]
+
+[[tool.mypy.overrides]]
+module = ["matplotlib.*"]
+ignore_missing_imports = true
