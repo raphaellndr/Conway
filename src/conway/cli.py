@@ -21,6 +21,21 @@ def _create_subsets(main_set: set[tuple], nb_subsets: int):
     return subsets
 
 
+def _get_pool_result(result: list[tuple[set[tuple], set[tuple]]]) -> tuple[set, set]:
+    """Gets pool result.
+
+    :param result: result of the pool.
+    :return: current and previous living cells.
+    """
+    living_cells = set()
+    prev_living_cells = set()
+    for res in result:
+        living_cells.update(res[0])
+        prev_living_cells.update(res[1])
+
+    return living_cells, prev_living_cells
+
+
 def conway(
     grid_size: int = typer.Option(10, help="Size of the grid created."),
     initialization: GridInitialization = typer.Option(
@@ -29,30 +44,23 @@ def conway(
     jobs: int = typer.Option(1, help="Number of subprocesses used."),
 ) -> None:
     """TODO: write docstring"""
-
     grid: Grid = Grid(grid_size)
     grid_array: np.ndarray = grid.grid_init(initialization.value)
 
     living_cells: set[tuple] = find_living_cells(grid_array)
-    living_cells_subsets = _create_subsets(living_cells.copy(), jobs)
 
     with Pool(jobs) as pool:
         while grid_array.any():
             print(grid_array)
 
+            living_cells_subsets = _create_subsets(living_cells.copy(), jobs)
             args = [(grid_array, living_cells, subset) for subset in living_cells_subsets]
 
             result = pool.starmap(update_positions, args)
 
-            living_cells = set()
-            prev_living_cells = set()
-            for res in result:
-                living_cells.update(res[0])
-                prev_living_cells.update(res[1])
+            living_cells, prev_living_cells = _get_pool_result(result)
 
             grid_array = update_grid(grid_array, living_cells, prev_living_cells)
-
-            living_cells_subsets = _create_subsets(living_cells.copy(), jobs)
 
 
 def run() -> None:
