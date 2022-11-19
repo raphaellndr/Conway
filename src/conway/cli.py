@@ -1,7 +1,7 @@
 """This module contains the core of the app."""
 
 import random
-from multiprocessing import Pool
+from multiprocessing import Pool, cpu_count
 
 import numpy as np
 import typer
@@ -29,6 +29,8 @@ def conway(
     jobs: int = typer.Option(1, help="Number of subprocesses used."),
 ) -> None:
     """TODO: write docstring"""
+    if jobs > cpu_count():
+        raise ValueError(f"Maximum of jobs possible is {cpu_count()} but {jobs} were given")
 
     grid: Grid = Grid(grid_size)
     grid_array: np.ndarray = grid.grid_init(initialization.value)
