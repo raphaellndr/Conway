@@ -1,5 +1,6 @@
 """This module contains definitions of different structures."""
 
+import abc
 from enum import Enum
 
 import numpy as np
@@ -34,11 +35,19 @@ class SpaceshipStructures(Enum):
     HWSS = "hwss"
 
 
-class Stabilized:
-    """Contains the definition of stabilized structures."""
+class Structure(abc.ABC):  # pylint: disable=too-few-public-methods
+    """Defines a structure class."""
 
     def __init__(self, name: str):
         self.array: np.ndarray = self.init_structure(name)
+
+    @abc.abstractmethod
+    def init_structure(self, name: str) -> np.ndarray:
+        """Initializes a structure according to the name given."""
+
+
+class Stabilized(Structure):
+    """Contains the definition of stabilized structures."""
 
     def init_structure(self, name: str) -> np.ndarray:
         """Initializes a stabilized structure according to the name given."""
@@ -84,11 +93,8 @@ class Stabilized:
         return np.asarray([[1, 1], [1, 1]])
 
 
-class Oscillator:
+class Oscillator(Structure):
     """Contains the definition of oscillating structures."""
-
-    def __init__(self, name: str):
-        self.array: np.ndarray = self.init_structure(name)
 
     def init_structure(self, name: str) -> np.ndarray:
         """Initializes an oscillator according to the name given."""
@@ -161,11 +167,8 @@ class Oscillator:
         )
 
 
-class SpaceShip:
+class SpaceShip(Structure):
     """Contains the definition of spaceships structures."""
-
-    def __init__(self, name: str):
-        self.array: np.ndarray = self.init_structure(name)
 
     def init_structure(self, name: str) -> np.ndarray:
         """Initializes a spaceship according to the name given."""

@@ -100,8 +100,10 @@ class Grid:
         """
         self.grid_size: int = grid_size
 
-    def grid_init(self, structure_name: str) -> np.ndarray:
+    def grid_init(self, structure_init: GridInitialization) -> np.ndarray:
         """Initializes the grid with a stabilized structure."""
+
+        structure_name: str = structure_init.value
 
         if structure_name in set(stabilized.value for stabilized in StabilizedStructures):
             structure = Stabilized(structure_name).array
