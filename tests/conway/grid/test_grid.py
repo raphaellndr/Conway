@@ -107,5 +107,4 @@ def test_update_grid(
 )
 def test_grid_initialization(structure: str, res_grid: np.ndarray) -> None:
     grid = Grid(4).grid_init(structure)
-
     assert np.array_equiv(grid, res_grid)
