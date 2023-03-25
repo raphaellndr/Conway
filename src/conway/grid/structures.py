@@ -56,31 +56,26 @@ class Stabilized:
     @staticmethod
     def block() -> np.ndarray:
         """Instantiates a block structure."""
-
         return np.asarray([[1, 1], [1, 1]])
 
     @staticmethod
     def beehive() -> np.ndarray:
         """Instantiates a beehive structure."""
-
         return np.asarray([[0, 1, 1, 0], [1, 0, 0, 1], [0, 1, 1, 0]])
 
     @staticmethod
     def loaf() -> np.ndarray:
         """Instantiates a loaf structure."""
-
         return np.asarray([[0, 1, 1, 0], [1, 0, 0, 1], [0, 1, 0, 1], [0, 0, 1, 0]])
 
     @staticmethod
     def boat() -> np.ndarray:
         """Instantiates a boat structure."""
-
         return np.asarray([[1, 1], [1, 1]])
 
     @staticmethod
     def tub() -> np.ndarray:
         """Instantiates a tub structure."""
-
         return np.asarray([[1, 1], [1, 1]])
 
 
@@ -105,26 +100,22 @@ class Oscillator:
 
     @staticmethod
     def beacon() -> np.ndarray:
-        """Beacon oscillator (period 2)"""
-
+        """Beacon oscillator (period 2)."""
         return np.asarray([[1, 1, 0, 0], [1, 1, 0, 0], [0, 0, 1, 1], [0, 0, 1, 1]])
 
     @staticmethod
     def blinker() -> np.ndarray:
-        """Blinker oscillator (period 2)"""
-
+        """Blinker oscillator (period 2)."""
         return np.asarray([[1, 1, 1]])
 
     @staticmethod
     def toad() -> np.ndarray:
-        """Toad oscillator (period 2)"""
-
+        """Toad oscillator (period 2)."""
         return np.asarray([[0, 1, 1, 1], [1, 1, 1, 0]])
 
     @staticmethod
     def pulsar() -> np.ndarray:
-        """Pulsar oscillator (period 3)"""
-
+        """Pulsar oscillator (period 3)."""
         return np.asarray(
             [
                 [0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0],
@@ -145,8 +136,7 @@ class Oscillator:
 
     @staticmethod
     def penta_decathlon() -> np.ndarray:
-        """Penta-decathlon oscillator (period 15)"""
-
+        """Penta-decathlon oscillator (period 15)."""
         return np.asarray(
             [
                 [1, 1, 1],
@@ -181,19 +171,16 @@ class SpaceShip:
     @staticmethod
     def glider():
         """Instantiates a glider spaceship."""
-
         return np.asarray([[0, 1, 0], [0, 0, 1], [1, 1, 1]])
 
     @staticmethod
     def lwss():
         """Instantiates a light-weight spaceship (lwss)."""
-
         return np.asarray([[1, 0, 0, 1, 0], [0, 0, 0, 0, 1], [1, 0, 0, 0, 1], [0, 1, 1, 1, 1]])
 
     @staticmethod
     def mwss():
         """Instantiates a middle-weight spaceship (mwss)."""
-
         return np.asarray(
             [
                 [0, 0, 1, 0, 0, 0],
@@ -207,7 +194,6 @@ class SpaceShip:
     @staticmethod
     def hwss():
         """Instantiates a heavy-weight spaceship (hwss)."""
-
         return np.asarray(
             [
                 [0, 0, 1, 1, 0, 0, 0],
