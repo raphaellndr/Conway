@@ -80,12 +80,12 @@ class Stabilized(_Structure):
     @staticmethod
     def boat() -> np.ndarray:
         """Instantiates a boat structure."""
-        return np.asarray([[1, 1], [1, 1]])
+        return np.asarray([[1, 1, 0], [1, 0, 1], [0, 1, 0]])
 
     @staticmethod
     def tub() -> np.ndarray:
         """Instantiates a tub structure."""
-        return np.asarray([[1, 1], [1, 1]])
+        return np.asarray([[0, 1, 0], [1, 0, 1], [0, 1, 0]])
 
 
 class Oscillator(_Structure):
