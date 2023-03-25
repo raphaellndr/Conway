@@ -117,7 +117,7 @@ class Grid:
                 f"{structure.shape})"
             )
         if self.grid_size > max(structure.shape):
-            structure = padding(structure, self.grid_size, self.grid_size)
+            structure = padding(structure, desired_h=self.grid_size, desired_w=self.grid_size)
 
         return structure
 

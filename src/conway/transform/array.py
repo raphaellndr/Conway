@@ -3,7 +3,7 @@
 import numpy as np
 
 
-def padding(array: np.ndarray, desired_h: int, desired_w: int) -> np.ndarray:
+def padding(array: np.ndarray, *, desired_h: int, desired_w: int) -> np.ndarray:
     """Pads an array to a desired shape. Credit: https://stackoverflow.com/a/59241336.
 
     :param array: numpy array.
