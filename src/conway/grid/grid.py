@@ -116,7 +116,7 @@ class Grid:
                 f"The grid size isn't big enough to fit the chosen structure (shape = "
                 f"{structure.shape})"
             )
-        if self.grid_size > max(structure.shape):
+        if self.grid_size > min(structure.shape):
             structure = padding(structure, desired_h=self.grid_size, desired_w=self.grid_size)
 
         return structure
