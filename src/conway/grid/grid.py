@@ -102,7 +102,6 @@ class Grid:
 
     def grid_init(self, structure_name: str) -> np.ndarray:
         """Initializes the grid with a stabilized structure."""
-
         if structure_name in set(stabilized.value for stabilized in StabilizedStructures):
             structure = Stabilized(structure_name).array
         elif structure_name in set(oscillator.value for oscillator in OscillatingStructures):
@@ -124,7 +123,6 @@ class Grid:
 
     def random_init(self) -> np.ndarray:
         """Initializes a random grid."""
-
         random_grid: np.ndarray = np.random.choice(
             [0, 1], size=(self.grid_size, self.grid_size), p=[4.0 / 5, 1.0 / 5]
         )
