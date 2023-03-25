@@ -28,11 +28,4 @@ def find_living_cells(array: np.ndarray) -> set[tuple]:
 
     :param array: array to look for living cells into.
     """
-
-    positions: set[tuple] = set()
-    living_cells_pos: np.ndarray = np.argwhere(array == 1)
-
-    for pos in living_cells_pos:
-        positions.add(tuple(pos))
-
-    return positions
+    return set(zip(*np.where(array == 1)))
