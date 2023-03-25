@@ -65,3 +65,47 @@ def test_update_grid(
     )
     array = update_grid(array, living_cells, prev_living_cells)
     assert np.array_equiv(array, res_array)
+
+
+@pytest.mark.parametrize(
+    "structure,res_grid",
+    [
+        (
+            "blinker",
+            np.asarray(
+                [
+                    [0, 0, 0, 0],
+                    [1, 1, 1, 0],
+                    [0, 0, 0, 0],
+                    [0, 0, 0, 0],
+                ]
+            ),
+        ),
+        (
+            "beacon",
+            np.asarray(
+                [
+                    [1, 1, 0, 0],
+                    [1, 1, 0, 0],
+                    [0, 0, 1, 1],
+                    [0, 0, 1, 1],
+                ]
+            ),
+        ),
+        (
+            "tub",
+            np.asarray(
+                [
+                    [0, 1, 0, 0],
+                    [1, 0, 1, 0],
+                    [0, 1, 0, 0],
+                    [0, 0, 0, 0],
+                ]
+            ),
+        ),
+    ],
+)
+def test_grid_initialization(structure: str, res_grid: np.ndarray) -> None:
+    grid = Grid(4).grid_init(structure)
+
+    assert np.array_equiv(grid, res_grid)
