@@ -1,4 +1,4 @@
-"""This module contains useful functions to get a cell's information"""
+"""This module contains useful functions to get a cell's information."""
 
 import numpy as np
 
