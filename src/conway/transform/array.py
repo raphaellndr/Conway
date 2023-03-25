@@ -3,7 +3,7 @@
 import numpy as np
 
 
-def padding(array: np.ndarray, desired_h: int, desired_w: int):
+def padding(array: np.ndarray, desired_h: int, desired_w: int) -> np.ndarray:
     """Pads an array to a desired shape. Credit: https://stackoverflow.com/a/59241336.
 
     :param array: numpy array.
@@ -11,7 +11,6 @@ def padding(array: np.ndarray, desired_h: int, desired_w: int):
     :param desired_w: desired width.
     :return: padded array.
     """
-
     array_h = array.shape[0]
     array_w = array.shape[1]
 
