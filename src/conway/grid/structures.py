@@ -1,5 +1,6 @@
 """This module contains definitions of different structures."""
 
+import abc
 from enum import Enum
 
 import numpy as np
@@ -34,14 +35,22 @@ class SpaceshipStructures(Enum):
     HWSS = "hwss"
 
 
-class Stabilized:
-    """Contains the definition of stabilized structures."""
+class _Structure(abc.ABC):  # pylint: disable=too-few-public-methods
+    """Defines a structure."""
 
     def __init__(self, name: str):
         self.array: np.ndarray = self.init_structure(name)
 
+    @abc.abstractmethod
     def init_structure(self, name: str) -> np.ndarray:
-        """Initializes a stabilized structure according to the name given."""
+        """Initializes a structure according to the given name."""
+
+
+class Stabilized(_Structure):
+    """Contains the definition of stabilized structures."""
+
+    def init_structure(self, name: str) -> np.ndarray:
+        """Initializes a stabilized structure according to the given name."""
 
         if name == StabilizedStructures.BLOCK.value:
             return self.block()
@@ -79,14 +88,11 @@ class Stabilized:
         return np.asarray([[1, 1], [1, 1]])
 
 
-class Oscillator:
+class Oscillator(_Structure):
     """Contains the definition of oscillating structures."""
 
-    def __init__(self, name: str):
-        self.array: np.ndarray = self.init_structure(name)
-
     def init_structure(self, name: str) -> np.ndarray:
-        """Initializes an oscillator according to the name given."""
+        """Initializes an oscillator according to the given name."""
 
         if name == OscillatingStructures.BEACON.value:
             return self.beacon()
@@ -151,14 +157,11 @@ class Oscillator:
         )
 
 
-class SpaceShip:
+class SpaceShip(_Structure):
     """Contains the definition of spaceships structures."""
 
-    def __init__(self, name: str):
-        self.array: np.ndarray = self.init_structure(name)
-
     def init_structure(self, name: str) -> np.ndarray:
-        """Initializes a spaceship according to the name given."""
+        """Initializes a spaceship according to the given name."""
 
         if name == SpaceshipStructures.GLIDER.value:
             return self.glider()
