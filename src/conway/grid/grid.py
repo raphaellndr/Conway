@@ -7,12 +7,12 @@ import numpy as np
 from ..transform.array import padding
 from .cell import get_neighbors
 from .structures import (
-    OscillatingStructures,
     Oscillator,
     SpaceShip,
     SpaceshipStructures,
     Stabilized,
     StabilizedStructures,
+    OscillatingStructures,
 )
 
 
@@ -108,8 +108,10 @@ class Grid:
             structure = Oscillator(structure_name).array
         elif structure_name in set(spaceship.value for spaceship in SpaceshipStructures):
             structure = SpaceShip(structure_name).array
-        else:
+        elif structure_name == GridInitialization.RANDOM:
             structure = self.random_init()
+        else:
+            raise AttributeError(f"Unknown structure: '{structure_name}'")
 
         if self.grid_size < max(structure.shape):
             raise ValueError(

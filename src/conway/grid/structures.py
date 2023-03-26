@@ -41,26 +41,13 @@ class _Structure(abc.ABC):  # pylint: disable=too-few-public-methods
     def __init__(self, name: str):
         self.array: np.ndarray = self.init_structure(name)
 
-    @abc.abstractmethod
     def init_structure(self, name: str) -> np.ndarray:
         """Initializes a structure according to the given name."""
+        return getattr(self, name)()
 
 
 class Stabilized(_Structure):
     """Contains the definition of stabilized structures."""
-
-    def init_structure(self, name: str) -> np.ndarray:
-        """Initializes a stabilized structure according to the given name."""
-
-        if name == StabilizedStructures.BLOCK.value:
-            return self.block()
-        if name == StabilizedStructures.BEEHIVE.value:
-            return self.beehive()
-        if name == StabilizedStructures.LOAF.value:
-            return self.loaf()
-        if name == StabilizedStructures.BOAT.value:
-            return self.boat()
-        return self.tub()
 
     @staticmethod
     def block() -> np.ndarray:
@@ -90,19 +77,6 @@ class Stabilized(_Structure):
 
 class Oscillator(_Structure):
     """Contains the definition of oscillating structures."""
-
-    def init_structure(self, name: str) -> np.ndarray:
-        """Initializes an oscillator according to the given name."""
-
-        if name == OscillatingStructures.BEACON.value:
-            return self.beacon()
-        if name == OscillatingStructures.BLINKER.value:
-            return self.blinker()
-        if name == OscillatingStructures.TOAD.value:
-            return self.toad()
-        if name == OscillatingStructures.PULSAR.value:
-            return self.pulsar()
-        return self.penta_decathlon()
 
     @staticmethod
     def beacon() -> np.ndarray:
@@ -159,17 +133,6 @@ class Oscillator(_Structure):
 
 class SpaceShip(_Structure):
     """Contains the definition of spaceships structures."""
-
-    def init_structure(self, name: str) -> np.ndarray:
-        """Initializes a spaceship according to the given name."""
-
-        if name == SpaceshipStructures.GLIDER.value:
-            return self.glider()
-        if name == SpaceshipStructures.LWSS.value:
-            return self.lwss()
-        if name == SpaceshipStructures.MWSS.value:
-            return self.mwss()
-        return self.hwss()
 
     @staticmethod
     def glider():
