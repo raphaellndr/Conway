@@ -108,7 +108,7 @@ class Grid:
             structure = Oscillator(structure_name).array
         elif structure_name in set(spaceship.value for spaceship in SpaceshipStructures):
             structure = SpaceShip(structure_name).array
-        elif structure_name == GridInitialization.RANDOM:
+        elif structure_name == GridInitialization.RANDOM.value:
             structure = self.random_init()
         else:
             raise AttributeError(f"Unknown structure: '{structure_name}'")
