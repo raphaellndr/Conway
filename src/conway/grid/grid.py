@@ -8,7 +8,7 @@ from ..transform.array import padding
 from .cell import get_neighbors
 from .structures import (
     Oscillator,
-    SpaceShip,
+    Spaceship,
     SpaceshipStructures,
     Stabilized,
     StabilizedStructures,
@@ -107,7 +107,7 @@ class Grid:
         elif structure_name in set(oscillator.value for oscillator in OscillatingStructures):
             structure = Oscillator(structure_name).array
         elif structure_name in set(spaceship.value for spaceship in SpaceshipStructures):
-            structure = SpaceShip(structure_name).array
+            structure = Spaceship(structure_name).array
         elif structure_name == GridInitialization.RANDOM.value:
             structure = self.random_init()
         else:
@@ -119,7 +119,9 @@ class Grid:
                 f"{structure.shape})"
             )
         if self.grid_size > min(structure.shape):
-            structure = padding(structure, desired_h=self.grid_size, desired_w=self.grid_size)
+            structure = padding(
+                structure, desired_height=self.grid_size, desired_width=self.grid_size
+            )
 
         return structure
 

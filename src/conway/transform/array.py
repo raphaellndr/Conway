@@ -3,21 +3,21 @@
 import numpy as np
 
 
-def padding(array: np.ndarray, *, desired_h: int, desired_w: int) -> np.ndarray:
+def padding(array: np.ndarray, *, desired_height: int, desired_width: int) -> np.ndarray:
     """Pads an array to a desired shape. Credit: https://stackoverflow.com/a/59241336.
 
     :param array: numpy array.
-    :param desired_h: desired height.
-    :param desired_w: desired width.
+    :param desired_height: desired height.
+    :param desired_width: desired width.
     :return: padded array.
     """
-    array_h = array.shape[0]
-    array_w = array.shape[1]
+    array_height = array.shape[0]
+    array_width = array.shape[1]
 
-    a = (desired_h - array_h) // 2  # pylint: disable=invalid-name
-    aa = desired_h - a - array_h  # pylint: disable=invalid-name
+    a = (desired_height - array_height) // 2  # pylint: disable=invalid-name
+    aa = desired_height - a - array_height  # pylint: disable=invalid-name
 
-    b = (desired_w - array_w) // 2  # pylint: disable=invalid-name
-    bb = desired_w - b - array_w  # pylint: disable=invalid-name
+    b = (desired_width - array_width) // 2  # pylint: disable=invalid-name
+    bb = desired_width - b - array_width  # pylint: disable=invalid-name
 
     return np.pad(array, pad_width=((a, aa), (b, bb)))

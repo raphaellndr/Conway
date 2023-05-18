@@ -7,7 +7,7 @@ import numpy as np
 
 
 class StabilizedStructures(Enum):
-    """Possible stabilized structures."""
+    """Available stabilized structures."""
 
     BLOCK = "block"
     BEEHIVE = "beehive"
@@ -17,7 +17,7 @@ class StabilizedStructures(Enum):
 
 
 class OscillatingStructures(Enum):
-    """Possible oscillating structures."""
+    """Available oscillating structures."""
 
     BEACON = "beacon"
     BLINKER = "blinker"
@@ -27,7 +27,7 @@ class OscillatingStructures(Enum):
 
 
 class SpaceshipStructures(Enum):
-    """Possible spaceships structures."""
+    """Available spaceships structures."""
 
     GLIDER = "glider"
     LWSS = "lwss"
@@ -36,7 +36,7 @@ class SpaceshipStructures(Enum):
 
 
 class _Structure(abc.ABC):  # pylint: disable=too-few-public-methods
-    """Defines a structure."""
+    """Base of every type of structure."""
 
     def __init__(self, name: str):
         self.array: np.ndarray = self.init_structure(name)
@@ -47,7 +47,7 @@ class _Structure(abc.ABC):  # pylint: disable=too-few-public-methods
 
 
 class Stabilized(_Structure):
-    """Contains the definition of stabilized structures."""
+    """Contains definition of stabilized structures."""
 
     @staticmethod
     def block() -> np.ndarray:
@@ -76,7 +76,7 @@ class Stabilized(_Structure):
 
 
 class Oscillator(_Structure):
-    """Contains the definition of oscillating structures."""
+    """Contains definition of oscillating structures."""
 
     @staticmethod
     def beacon() -> np.ndarray:
@@ -131,8 +131,8 @@ class Oscillator(_Structure):
         )
 
 
-class SpaceShip(_Structure):
-    """Contains the definition of spaceships structures."""
+class Spaceship(_Structure):
+    """Contains definition of spaceships structures."""
 
     @staticmethod
     def glider():

@@ -4,12 +4,12 @@ import numpy as np
 
 
 def get_neighbors(array_shape: tuple, x: int, y: int) -> set[tuple]:
-    """Get cell's neighbors positions.
+    """Gets cell's neighbors positions.
 
     :param array_shape: shape of the array containing the cell.
     :param x: cell's x index.
     :param y: cell's y index.
-    :return: cell's neighbors positions.
+    :returns: set of neighbors positions.
     """
     neighbors: set[tuple] = set()
 
@@ -27,5 +27,6 @@ def find_living_cells(array: np.ndarray) -> set[tuple]:
     """Gets living cells positions.
 
     :param array: array to look for living cells into.
+    :returns: set of positions.
     """
     return set(zip(*np.where(array == 1)))

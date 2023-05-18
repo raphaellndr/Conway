@@ -42,5 +42,5 @@ def test_padding(desired_h: int, desired_w: int, res_array: np.ndarray) -> None:
         ]
     )
 
-    padded_array = padding(array, desired_h=desired_h, desired_w=desired_w)
+    padded_array = padding(array, desired_height=desired_h, desired_width=desired_w)
     assert np.array_equiv(padded_array, res_array)
