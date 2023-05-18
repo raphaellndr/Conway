@@ -75,15 +75,15 @@ def conway(
     jobs: int = typer.Option(
         1, help="Number of subprocesses used. If value is -1, all cpus are used."
     ),
-    interval: float = typer.Option(1, help="Delay between frames in milliseconds."),
+    fps: float = typer.Option(1, help="Number of frames per second."),
 ) -> None:
     """Creates a grid and initializes it with a structure (or with random cells). Animates the grid
     according to Conway's rules.
 
     :param grid_size: size of the grid to create.
     :param initialization: type of initialization (random or a specific structure).
-    :param jobs: numbers of workers (jobs) to use.
-    :param interval: delay between frames in milliseconds.
+    :param jobs: number of workers (jobs) to use.
+    :param fps: number of frames per second.
     """
     nb_cpu = cpu_count()
     if jobs > nb_cpu:
@@ -96,9 +96,7 @@ def conway(
 
     generator = _generate_grid(grid_array=grid_array, jobs=jobs)
     fig = plt.figure()
-    _ = animation.FuncAnimation(
-        fig, _animate, frames=generator, repeat=False, interval=interval * 1000
-    )
+    _ = animation.FuncAnimation(fig, _animate, frames=generator, repeat=False, interval=1000 // fps)
     plt.show()
 
 
