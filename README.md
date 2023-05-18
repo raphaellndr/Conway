@@ -23,10 +23,10 @@ Python and Poetry. And, of course, you will need to clone this repo on your mach
 
 Once Git [installed](https://git-scm.com/downloads), simply clone the repository on your machine:
 
-```shell
+````shell
 cd your_directory
 git clone https://github.com/raphaellndr/Conway.git
-```
+````
 
 ### Python
 
@@ -43,10 +43,10 @@ Then, do as follows:
 
 - Spawn a shell within the virtual environment (if none exists yet, it will be created):
 
-```shell
+````shell
 cd conway
 poetry shell
-```
+````
 
 -  Resolve the dependencies and install them:
 
@@ -54,3 +54,56 @@ poetry shell
 poetry install
 ```
 
+## Run project
+
+Now that everything is correctly installed, it's time to actually try the game. To run the program,
+the command is pretty simple:
+
+````shell
+conway
+````
+
+This will open a matplotlib animation with a 50x50 grid, with cells being randomly initialized (a cell
+has a chance of 1/5 to be alive).
+
+Of course, this command has a few different parameters:
+
+### Change grid size
+
+Modifying the grid size can be done as follows (for example a 100x100 grid):
+
+````shell
+conway --grid-size 100
+````
+
+### Choose the initialization
+
+You can choose to run the program either with a random initialization (default behaviour) or a specific structure. For
+example, here is a command to start with a penta-decathlon structure:
+
+````shell
+conway --initialization penta_decathlon
+````
+
+Here are every structure currently available: random, block, beehive, loaf, boat, tub, beacon, blinker, toad, pulsar, 
+penta_decathlon, glider, lwss, mwss, hwss.
+
+### Set number of CPU jobs
+
+If it runs too slow on your machine, you can try to accelerate calculus by using more CPUs (here, 10 subprocesses):
+
+````shell
+conway --jobs 10
+````
+
+Setting the value to *-1* will use all of your CPUs. On the other hand, choosing to many jobs  will raise an error and 
+stop the program.
+
+### Set FPS
+
+Finally, it as also possible to choose the FPS (as long as your machine can perform calculus fast enough to 
+follow through). Here is how to run a 60 FPS game:
+
+````shell
+conway --fps 60
+````
