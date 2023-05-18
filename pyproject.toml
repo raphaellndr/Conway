@@ -27,7 +27,7 @@ pylint = "2.15.5"
 ruff = "0.0.120"
 
 [tool.poetry.scripts]
-euler = "conway.__main__:main"
+conway = "conway.__main__:main"
 
 [tool.black]
 line-length = 100
