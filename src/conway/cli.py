@@ -68,7 +68,7 @@ def _animate(frames: np.ndarray) -> None:
 
 
 def conway(
-    grid_size: int = typer.Option(10, help="Size of the grid created."),
+    grid_size: int = typer.Option(50, help="Size of the grid created."),
     initialization: GridInitialization = typer.Option(
         GridInitialization.RANDOM.value, help="Type of initialization."
     ),
