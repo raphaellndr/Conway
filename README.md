@@ -85,6 +85,12 @@ example, here is a command to start with a penta-decathlon structure:
 conway --initialization penta_decathlon
 ````
 
+Here is the result of the previous command:
+
+<p align="center">
+<img src="./gifs/penta_decathlon.gif" width="250" height="250">
+</p>
+
 Here are every structure currently available: random, block, beehive, loaf, boat, tub, beacon, blinker, toad, pulsar, 
 penta_decathlon, glider, lwss, mwss, hwss.
 
