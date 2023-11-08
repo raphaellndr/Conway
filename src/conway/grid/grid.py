@@ -4,7 +4,7 @@ from enum import Enum
 
 import numpy as np
 
-from ..transform.array import padding
+from conway.transform.array import padding
 from .cell import get_neighbors
 from .structures import (
     Oscillator,
@@ -47,7 +47,7 @@ def update_positions(
     :param array: grid array.
     :param living_cells: living cells positions.
     :param subset_living_cells: subset of living cells positions.
-    :return: positions of the living cells.
+    :returns: positions of the living cells.
     """
     prev_living_cells: set[tuple] = subset_living_cells.copy()
     for living_cell in prev_living_cells:
@@ -80,6 +80,7 @@ def update_grid(
     :param array: grid to update.
     :param living_cells: current living cells.
     :param prev_living_cells: previous living cells.
+    :returns: updated grid.
     """
     for cell in living_cells:
         array[cell] = 1
@@ -101,7 +102,11 @@ class Grid:
         self.grid_size: int = grid_size
 
     def grid_init(self, structure_name: str) -> np.ndarray:
-        """Initializes the grid with a stabilized structure."""
+        """Initializes the grid with a stabilized structure.
+        
+        :param structure_name: name of the structure to initialize.
+        :returns: grid initialized with the desired structure.
+        """
         if structure_name in set(stabilized.value for stabilized in StabilizedStructures):
             structure = Stabilized(structure_name).array
         elif structure_name in set(oscillator.value for oscillator in OscillatingStructures):
@@ -126,7 +131,10 @@ class Grid:
         return structure
 
     def random_init(self) -> np.ndarray:
-        """Initializes a random grid."""
+        """Initializes a random grid.
+        
+        :returns: randomly initialized grid.
+        """
         random_grid: np.ndarray = np.random.choice(
             [0, 1], size=(self.grid_size, self.grid_size), p=[4.0 / 5, 1.0 / 5]
         )
